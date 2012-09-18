@@ -1,0 +1,122 @@
+
+<!-- saved from url=(0046)http://cemerick.github.com/jsdifflib/demo.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+
+<script type="text/javascript" src="./diff_files/dojo.xd.js"></script>
+<script type="text/javascript" src="./diff_files/diffview.js"></script>
+<link rel="stylesheet" type="text/css" href="./diff_files/diffview.css">
+<script type="text/javascript" src="./diff_files/difflib.js"></script>
+
+
+<script language="javascript">
+var $ = dojo.byId;
+var url = window.location.toString().split("#")[0];
+
+function diffUsingJS () {
+	var base = difflib.stringAsLines($("baseText").value);
+	var newtxt = difflib.stringAsLines($("newText").value);
+	var sm = new difflib.SequenceMatcher(base, newtxt);
+	var opcodes = sm.get_opcodes();
+	var diffoutputdiv = $("diffoutput");
+	while (diffoutputdiv.firstChild) diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+	var contextSize = $("contextSize").value;
+	contextSize = contextSize ? contextSize : null;
+	diffoutputdiv.appendChild(diffview.buildView({ baseTextLines:base,
+												   newTextLines:newtxt,
+												   opcodes:opcodes,
+												   baseTextName:"Base Text",
+												   newTextName:"New Text",
+												   contextSize:contextSize,
+												   viewType: $("inline").checked ? 1 : 0 }));
+	window.location = url + "#diff";
+}
+window.onresize = function() {
+	var w = document.body.clientWidth
+		, half_w = (w/2 - 60) + "px";
+	$('rightBlock').style.width = half_w;
+	$('leftBlock').style.width = half_w;
+	$('baseText').style.width = half_w;
+	$('newText').style.width = half_w;
+}
+window.onload = function() {
+	window.onresize();
+}
+
+</script>
+<style type="text/css">.jlhlebbhengjlhmcjebbkambaekglhkf {top: 0px; left: 0px;min-width: 30px;max-width: 300px;font-size: 13px;font-family: arial, helvetica, sans-serif;opacity: .93;padding:0px;position:absolute;display:block;z-index: 999997;font-style: normal;font-variant: normal;font-weight: normal;}#jlhlebbhengjlhmcjebbkambaekglhkf_up{text-align: center;padding:0px;margin: 0px;}#jlhlebbhengjlhmcjebbkambaekglhkf_cont{background-color: #729FCF;font-family: arial, helvetica, sans-serif-webkit-box-shadow: #729FCF 0px 0px 2px;color: #FFFFFF;padding:7px;-webkit-border-radius: 5px;}#jlhlebbhengjlhmcjebbkambaekglhkf_down{text-align: center;padding:0px;margin: 0px;}</style></head><style type="text/css">embed[type*="application/x-shockwave-flash"],embed[src*=".swf"],object[type*="application/x-shockwave-flash"],object[codetype*="application/x-shockwave-flash"],object[src*=".swf"],object[codebase*="swflash.cab"],object[classid*="D27CDB6E-AE6D-11cf-96B8-444553540000"],object[classid*="d27cdb6e-ae6d-11cf-96b8-444553540000"],object[classid*="D27CDB6E-AE6D-11cf-96B8-444553540000"]{	display: none !important;}
+.leftBlock{ float : left; padding-right : 5px;
+}
+.rightBlock { float : left; }
+body {
+background-color:#1c1c1c;
+margin:30px;
+font-family: Menlo, Consolas;
+}
+div.textBlock {
+color:#fff;
+}
+#diffoutput {
+margin : 5px 5px 30px 5px;
+}
+#diffoutput table {
+background-color:#fff;
+min-width : 50%;
+}	
+button.css3button {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #2d2f30;
+	padding: 10px 20px;
+margin: 10px auto;
+	width : 300px;
+	display : block;
+	background: -moz-linear-gradient(
+		top,
+		#c1c4c7 0%,
+		#f2f7fa);
+	background: -webkit-gradient(
+		linear, left top, left bottom, 
+		from(#c1c4c7),
+		to(#f2f7fa));
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	border: 1px solid #0d1014;
+	-moz-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(255,255,255,1);
+	-webkit-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(255,255,255,1);
+	box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(255,255,255,1);
+	text-shadow:
+		0px -1px 0px rgba(173,171,173,0.7),
+		0px 1px 0px rgba(255,255,255,0.3);
+}
+</style>
+<body>
+<div class="textBlock">
+	<strong>Context size (optional):</strong> <input type="text" id="contextSize" value=""><br>
+	<strong>Diff View Type:</strong>
+	<input type="radio" name="_viewtype" checked="checked" id="sidebyside"> Side by Side
+	&nbsp;&nbsp;
+	<input type="radio" name="_viewtype" id="inline"> Inline
+	<br style="clear:both" />
+	<div class="leftBlock" id="leftBlock">
+		<h2>Base Text</h2>
+		<textarea id="baseText" style="width:600px;height:300px"></textarea>
+	</div>
+	<div class="rightBlock" id="rightBlock">
+		<h2>New Text</h2>
+		<textarea id="newText" style="width:600px;height:300px"></textarea>
+	</div>
+	<br style="clear:both" />
+</div>
+	<button type="button" value="Diff" class="css3button" onclick="javascript:diffUsingJS();"> Diff </button><br><br>
+	<a name="diff"> </a>
+	<div id="diffoutput" style="width:100%"> </div>
+
+
+</body></html>
